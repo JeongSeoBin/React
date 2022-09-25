@@ -1,0 +1,10 @@
+# connected-react-router 적용하는 방법
+(redux와 router처리된 상태에서)
+1. ConnectedRouter (app.js)
+<Route/>들을 <ConnectedRouter></ConnectedRouter>로 감싼다
+2. routerMiddleware(history) (store.js)
+applyMiddleware()에 routerMiddleware(history)미들웨어 등록
+3. router: connectRouter(history) (reducer.js)
+페이지를 이동할 수 있는 액션을 디스패치했을때 처리할 수 있는 리듀서를 combineReducer()에 포함시킨다
+4. dispatch (/pages/Home.jsx)
+push와 같은 페이지를 이동하는 액션을 dispatch하면 route에 따라 해당 페이지로 이동한다
