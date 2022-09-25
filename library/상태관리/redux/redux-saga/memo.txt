@@ -1,0 +1,28 @@
+# redux-saga
+- 미들웨어
+- 사이드 effect을 일으키는 로직을 관리할 수 있다
+
+# redux-saga 적용 방법
+1. redux-saga 미들웨어 설정
+   - 사가 미들웨어 생성
+     sagaMiddleware = createSagaMiddleware();
+   - 사가 미들웨어를 리덕스 미들웨어로 등록
+     createStore(reducer, applyMiddleware(sagaMiddleware))
+
+2. 사가 미들웨어 함수 만들기
+   - redux-saga에서 제공하는 effect를 이용하여 side effect를 일으키는 함수를 작성한다
+   - 제너레이터 생성함수를 이용
+
+3. 작성한 사가 미들웨어 함수 등록
+   - 사가 미들웨어 등록함수 작성
+     takeEvery()를 실행하는 함수를 작성한다
+     * takeEvery(action, 사가 미들웨어 함수): 어떤 액션 타입에 의해 어떤 사가 미들웨어 함수가 실행될 것인지
+   - 사가 미들웨어 등록함수를 모은다 (rootSaga)
+     all()을 실행하는 함수를 작성한다
+     * all([사가 미들웨어 등록 함수()])
+
+4. 사가 미들웨어 함수 실행
+   - 사가 미들웨어 등록함수를 모은 함수를 실행한다
+     sagaMiddleware.run(rootSaga)
+
+5. 등록된 사가 미들웨어 함수를 실행할 액션을 디스패치한다

@@ -1,0 +1,5 @@
+# redux-promise-middleware
+- container는 미들웨어 함수를 디스패치하는 함수를 컴포넌트에게 전달하는 역할만 한다
+- 디스패치하여 미들웨어를 통과할때 미들웨어는 type뒤에 pending, fulfilled, rejected를 붙이고 promise를 처리하고 보내주는 로직을 담고 있다
+  즉, 미들웨어는 {type: 변조된 타입, payload: promise처리결과}를 리턴한다
+- reducer에서 변조된 action type에 따라 promise결과를 이용하여 상태변경하는 로직을 작성해야한다 

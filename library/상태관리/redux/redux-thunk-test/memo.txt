@@ -1,0 +1,21 @@
+# redux-thunk
+- 리덕스 미들웨어
+- 리덕스에서 비동기 처리를 위한 라이브러리
+- 액션 생성자를 활용하여 비동기 처리
+  - 기존에는 액션 생성자에서는 액션 객체만 리턴하고 비동기 로직을 container에서 작성하였다
+  - redux-thunk를 이용하면 액션 생성자에서 비동기 처리를 하는 함수를 리턴하게 만들고
+    container에서는 thunk 함수를 디스패치하는 함수를 component로 전달하는 역할만 한다
+    dispatch관련 로직을 action에 모을 수 있어서 역할이 분명해진다
+
+- thunk 작동 원리
+dispatch하기 전에 액션을 가로채서 액션이 함수인지 검사하고 action이 함수인 경우만 실행한 결과를 리턴한다
+
+function createThunkMiddleware(extraArgument) {
+  return ({dispatch, getState}) => (next) => (action) => {
+    if(typeof action === 'function') {
+      return action(dispatch, getState, extraArgument)
+    }
+
+    return next(action)
+  }
+}

@@ -1,0 +1,15 @@
+# redux middleware
+- 디스패치 메소드를 통해 store로 가고 있는 액션을 가로챈다 
+  미들웨어가 디스패치의 앞뒤에 코드를 추가할 수 있게 해준다
+- 미들웨어가 여러개이면 미들웨어가 순차적으로 실행된다
+- 미들웨어 함수 구조
+  function middleware(store){
+      return nexxt => {
+          return action => {
+              미들웨어 내에서 할 수 있는 일
+              - 넘겨받은 store인자를 통해 store.getState(), store.dispatch(action)
+          }
+      }
+  }
+- 미들웨어 등록
+  createStore(reducer, applyMiddleware(middleware))
