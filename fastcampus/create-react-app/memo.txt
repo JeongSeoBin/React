@@ -1,0 +1,85 @@
+# create react app(CRA)
+- 리엑트의 공식적인 툴
+- 프로젝트를 생성하는 역할
+- 개발하면서 필요한 여러 기능을 제공
+
+- npx create-react-app project명
+  * npx
+    npm 5.2.0 이상부터 함께 설치된 command line 명령어
+    현재 최신버전 라이브러리를 확인 후 받고 실행
+
+- package.json
+    // CRA로 만든 프로젝트에 자동으로 설치된 라이브러리들
+    "dependencies": {
+      "@testing-library/jest-dom": "^5.14.1",
+      "@testing-library/react": "^11.2.7",
+      "@testing-library/user-event": "^12.8.3",
+      //////////////// TEST를 위한 라이브러리 //////////////////
+      "react": "^17.0.2",
+      "react-dom": "^17.0.2",
+      "react-scripts": "4.0.3", // 개발환경으로 띄운다거나 배포를 위한 빌드 작업을 하는 등 CRA프로젝트 관리 역할
+      "web-vitals": "^1.1.2" // 구글에서 사이트 경험을 측정, 개선할 수 있도록 정보를 얻어내는 라이브러리
+    },
+
+    // CRA에서 실행할 수 있는 명령어
+    "scripts": {
+      "start": "react-scripts start", // 개발모드로 local에서 프로젝트를 띄울 수 있음, 'npm start' -> 코드를 수정하면 브라우저에서 자동으로 새로고침되어 수정사항 반영
+
+      "build": "react-scripts build", // 배포할 준비, production모드로 build 
+                                      // -> 'npm run build' -> compile 실행, 코드가 작아지고 최적화됨
+                                      // build된 production용 파일들을 실행하는 방법 
+                                      // -> build폴더에 production용 파일들이 저장되기 때문에 이 폴더를 파일서버로 운영
+                                      // -> 'npm install -g serve', 'serve -s build' 또는 'npx serve -s build' (일시적으로 설치하여 사용)
+        
+      "test": "react-scripts test", // jest를 기반으로 test코드 작성 (_tests_폴더아의 .js파일 | .test.js로 끝나는 파일 | .spec.js로 끝나는 파일)
+                                    // jest를 기반으로한 test runner가 설정되어 있으며 'npm test'를 실행하면 jest가 실행되어 test코드가 실행
+                                    // test코드를 수정하거나 소스코드를 수정하면 test라이브러리가 자동으로 다시 test    
+                                    * jest: 코드가 제대로 작동하는지 확인하는 test case를 만드는 테스팅 프레임 워크
+
+      "eject": "react-scripts eject" // CRA는 많은 기능을 제공하는 기능이 아닌 개발환경을 커스텀하고 싶을때
+                                     // -> 'npm run jest'
+                                     // -> CRA에서 react 프로젝트를 꺼내서 CRA의 관리를 받지 않겠다
+                                     // -> react-scripts가 사라지고 드러내지 않고 cra에 의해 사용되던 패키지들이 package,json에 나타남
+                                           jest, babel, ESLint 설정이 추가
+                                           각종 설정 파일이 config폴더에 생성
+    },
+
+- 
+   js jsx ----------> babel loader  <->  babel config (어떤 문법을 번역할건지 설정)
+            어떤 처리과정(컴파일)을 거칠지 작성
+   
+   css    ----------> css loader                                                               ===========>             최종 배포 파일
+                          .
+                          .
+                          .
+    
+
+                       webpack
+            파일확장자에 따라 해당loader에게 위임
+            js jsx는 babel loader에게 위임
+            css는 css loader에게 위임
+
+- CRA 구조
+  src/index.js
+   - react 프로젝트 시작
+      import App from './App'; // import: es6문법, webpack이 해당 파일의 확장자에 맞춰 loader를 이용해 import
+      import '.css'; // 해당 css코드가 들어온다
+      import logo from './logo.svg'; // 해당 이미지 데이터를 가져와 사용할 수 있다
+                                        <img src={logo}/>
+
+      ReactDOM.render(
+        <React.StrictMode>
+          <App />
+        </React.StrictMode>,
+        document.getElementById('root') // public/index.html에 있음
+                                           * public 폴더: static한 파일을 서빙하는 폴더
+      );
+
+
+# React Debug
+React Developer Tools
+- 브라우저 extension
+- f12 -> 상단 탭 중 components
+  컴포넌트 별 props, state도 변경해볼 수 있다
+- f12 -> 상단 탭 중 profiler
+  각 컴포넌트의 랜더되는데 걸린 시간 확인가능

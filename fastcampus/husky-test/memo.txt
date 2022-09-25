@@ -1,0 +1,40 @@
+# husky
+git hooks made easy
+git으로 인해 액션이 발생할때 무언가를 하고 싶은게 있다면 처리해주는 툴
+예를들면 commit 직후, push 전 할 수 있는 일을 정할 수 있다
+
+- husky 설치
+  git init 먼저 -> npm i husky
+
+  husky에서 git hook 사용을 위한 설치
+  -> npx husky install
+  -> package.json 
+       "scripts": {
+            "prepare": "husky install", // 추가
+            "test": "echo \"Error: no test specified\" && exit 1"
+        },
+
+- husky 사용
+  만약 commit하기 전에 'npm test'라는 scripts를 실행하고 싶을때
+  -> npx husky add .husky/pre-commit 'npm test'
+  -> test말고 할 수 있는 다른 일
+     prettier, eslint 검사&수정 명령어를 실행하여 커밋 전 코드를 점검할 수 있다
+
+- lint-staged
+  run linters on git staged files
+
+  eslint와 prettier, husky에 lint-staged까지 사용하면 commit 직전에 eslint와 prettier 검사를 통한 코드점검을 할 수 있다
+  -> lint-staged 설치
+     npm install lint-staged -D
+  -> lint-staged가 하는 일 규정
+     package.json
+       "lint-staged": {
+            "**/*.js": [ // js파일이 stage에 올라오면
+                "eslint --fix", // "eslint --fix" 명령을 실행하여 eslint 검사&수정
+                "prettier --write", // "prettier --write" 명령을 실행하여 prettier 검사&수정
+                "git add" // 수정한거 다시 add하여 stage에 올린다
+            ]
+        },
+  -> commit 전에 lint-staged 실행 
+     npx husky add .husky/pre-commit "lint-staged"
+     (pre-commit 파일에서 lint-staged -> npx lint-staged 로 수정)

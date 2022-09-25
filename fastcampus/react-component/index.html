@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>lifecycle</title>
+    <script
+      crossorigin
+      src="https://unpkg.com/react@17/umd/react.development.js"
+    ></script>
+    <script
+      crossorigin
+      src="https://unpkg.com/react-dom@17/umd/react-dom.development.js"
+    ></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  </head>
+  <body>
+    <div id="root"></div>
+
+    <!-- react version 16.3 이전 lifecycle -->
+    <!-- <script type="text/babel">
+      class App extends React.Component {
+        state = {
+          age: 29,
+        };
+        interval = null;
+
+        constructor(props) {
+          super(props);
+          console.log("initialization", props);
+        }
+
+        // 탄생 시점 메서드 오버라이딩
+        componentWillMount() {
+          console.log("componentWillMount");
+        }
+
+        componentDidMount() {
+          console.log("componenentDidMount");
+
+          this.interval = setInterval(() => {
+            console.log("setInterval");
+
+            // shouldComponentUpdate -> componentWillUpdate -> render -> componentDidUpdate 출력
+            this.setState((state) => ({ ...state, age: state.age + 1 }));
+          }, 1000);
+        }
+
+        // update 후 재랜더링 시점 메서드 오버라이딩
+        componentWillReceiveProps(nextProps) {
+          console.log("componentWillReceiveProps", nextProps);
+        }
+
+        shouldComponentUpdate(nextProps, nextState) {
+          console.log("shouldComponentUpdate", nextProps, nextState);
+          return true;
+        }
+
+        componentWillUpdate(nextProps, nextState) {
+          console.log("componentWillUpdate", nextProps, nextState);
+        }
+
+        componentDidUpdate(prevProps, prevState) {
+          console.log("componentDidUpdate", prevProps, prevState);
+        }
+
+        render() {
+          console.log("render(mount)");
+          return (
+            <div>
+              <h2>
+                hello {this.props.name} {this.state.age}
+              </h2>
+            </div>
+          );
+        }
+
+        // 죽음 시점 메소드 오버라이딩
+        componentWillUnmount() {
+          clearInterval(this.interval);
+        }
+      }
+
+      // initaliztion -> componentWillMount -> render(mount) -> componentDidMount 출력
+      ReactDOM.render(<App name="Anana" />, document.querySelector("#root"));
+    </script> -->
+
+    <!-- react version 16.3 이후 lifecycle -->
+    <script type="text/babel">
+      // getDerivedStateFromProps 활용
+      //   class App extends React.Component {
+      //     state = {
+      //       age: 29,
+      //     };
+      //     interval = null;
+
+      //     constructor(props) {
+      //       super(props);
+      //       console.log("initialization", props);
+      //     }
+
+      //     // 탄생 시점 메서드 오버라이딩
+
+      //     // getDerivedStateFromProps
+      //     static getDerivedStateFromProps(nextProps, prevState) {
+      //       console.log("getDerivedStateFromProps", nextProps, prevState);
+      //       return { age: 10 };
+      //     }
+
+      //     componentDidMount() {
+      //       console.log("componenentDidMount");
+
+      //       this.interval = setInterval(() => {
+      //         console.log("setInterval");
+
+      //         this.setState((state) => ({ ...state, age: state.age + 1 }));
+      //       }, 1000);
+      //     }
+
+      //     // update 후 재랜더링 시점 메서드 오버라이딩
+
+      //     shouldComponentUpdate(nextProps, nextState) {
+      //       console.log("shouldComponentUpdate", nextProps, nextState);
+      //       return true;
+      //     }
+
+      //     componentDidUpdate(prevProps, prevState) {
+      //       console.log("componentDidUpdate", prevProps, prevState);
+      //     }
+
+      //     render() {
+      //       console.log("render(mount)");
+      //       return (
+      //         <div>
+      //           <h2>
+      //             hello {this.props.name} {this.state.age}
+      //           </h2>
+      //         </div>
+      //       );
+      //     }
+
+      //     // 죽음 시점 메소드 오버라이딩
+
+      //     componentWillUnmount() {
+      //       clearInterval(this.interval);
+      //     }
+      //   }
+
+      // getSnapshotBeforeUpdate 활용
+      //   let i = 0;
+      //   class App extends React.Component {
+      //     state = { list: [] };
+
+      //     render() {
+      //       return (
+      //         <div id="list" style={{ height: 100, overflow: "scroll" }}>
+      //           {this.state.list.map((i) => {
+      //             return <div>{i}</div>;
+      //           })}
+      //         </div>
+      //       );
+      //     }
+
+      //     componentDidMount() {
+      //       setInterval(() => {
+      //         this.setState((state) => ({
+      //           list: [...state.list, i++],
+      //         }));
+      //       }, 1000);
+      //     }
+
+      //     // getSnapshotBeforeUpdate
+      //     // 계속 최신 정보를 볼 수 있게 스크롤을 자동으로 조정하려 한다
+      //     // render전 스크롤 상태와 render후 스크롤 상태 비교 후 조정해야한다
+      //     // render전 scroll상태를 알기 위해 snapshot을 저장해야한다
+      //     // 이런 식으로 snapshot을 저장하는 역할을 하는 함수
+      //     getSnapshotBeforeUpdate(prevProps, prevState) {
+      //       // 업데이트하기 전 저장할 스냅샷이 없다
+      //       if (prevState.list.length === this.state.list.length) return null;
+      //       const list = document.querySelector("#list");
+      //       return list.scrollHeight - list.scrollTop;
+      //     }
+
+      //     // 이전 스크롤 상태가 저장된 snapshot을 가지고 스크롤을 조정
+      //     componentDidUpdate(prevProps, prevState, snapshot) {
+      //       console.log(snapshot);
+      //       if (snapshot === null) return;
+      //       const list = document.querySelector("#list");
+      //       list.scrollTop = list.scrollHeight - snapshot;
+      //     }
+      //   }
+
+      //   // componentDidCatch 활용
+      //   class App extends React.Component {
+      //     state = {
+      //       hasError: false,
+      //     };
+
+      //     render() {
+      //       if (this.state.hasError) {
+      //         return <div>error</div>;
+      //       }
+      //       return <WebService />;
+      //     }
+
+      //     componentDidCatch(error, info) {
+      //       this.setState({ hasError: true });
+      //     }
+      //   }
+
+      ReactDOM.render(<App name="Anana" />, document.querySelector("#root"));
+    </script>
+  </body>
+</html>

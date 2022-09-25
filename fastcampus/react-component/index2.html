@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script
+      crossorigin
+      src="https://unpkg.com/react@17/umd/react.development.js"
+    ></script>
+    <script
+      crossorigin
+      src="https://unpkg.com/react-dom@17/umd/react-dom.development.js"
+    ></script>
+    <!-- babel 사용하기 위한 cdn -->
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script type="text/babel">
+      /* class Component */
+      // class ClassComponent extends React.Component {
+      //     render() {
+      //         return React.createElement('p', null, 'hello');
+      //     }
+      // }
+
+      // ReactDOM.render(React.createElement(ClassComponent, null, null), document.querySelector('#root'))
+
+      /* function component */
+      // function FunctionComponent() {
+      //     return React.createElement('p', null, 'hello');
+      // }
+
+      // const FunctionComponent = () => {
+      //     return React.createElement('p', null, 'hello');
+      // }
+
+      // ReactDOM.render(React.createElement(FunctionComponent, null, null), document.querySelector('#root'))
+
+      /* React.createElement */
+      // 1. 태그
+      // ReactDOM.render(
+      //     React.createElement('h1', null, `type이 "태그 이름 문자열"입니다`), // <h1>type이 "태그 이름 문자열"입니다</h1>
+      //     document.querySelector('#root')
+      // )
+
+      // 2. 리액트 컴포넌트
+      // const Component = () => {
+      //     return React.createElement('p', null, `type이 "react component" 입니다`)
+      // }
+
+      // ReactDOM.render(
+      //     React.createElement(Component, null, null), // <Component/> => <p>type이 "react component" 입니다</p>
+      //     document.querySelector('#root')
+      // )
+
+      // 3. react.Fragment
+      // ReactDOM.render(
+      //     React.createElement( // <>type이 "React Fragment"입니다</>
+      //         React.Fragment,
+      //         null,
+      //         `type이 "React Fragment"입니다`
+      //     ),
+      //     document.querySelector('#root')
+      // )
+
+      // 4. 복잡한 react element 모임 -> React.createElement의 한계 -> jsx
+      // <div><div><h1>주제</h1><ul><li>react</li><li>vue</li><ul></div></div>
+      // ReactDOM.render(
+      //     React.createElement(
+      //         'div',
+      //         null,
+      //         React.createElement(
+      //             'div',
+      //             null,
+      //             React.createElement('h1', null, '주제'),
+      //             React.createElement(
+      //                 'ul',
+      //                 null,
+      //                 React.createElement('li', null, 'react')
+      //             )
+      //         )
+      //     ),
+      //     document.querySelector('#root')
+      // )
+
+      // jsx
+      // const title = 'title'
+      // ReactDOM.render(
+      //     <div>
+      //         <div>
+      //             <h1>{title}</h1>
+      //             <ul><li>react</li></ul>
+      //         </div>
+      //     </div>,
+      //     document.querySelector('#root')
+      // )
+
+      /* props와 state를 바탕으로 component 그리기 */
+
+      // 함수형 component
+      // props {name: 'Anana', age: 10}
+      // function Component(props) {
+      //     // render 함수 역할
+      //     return (
+      //         <div>이름은 {props.name}이고 나이는 {props.age}입니다</div>
+      //     )
+      // }
+
+      // 클래스 component
+      // class Component extends React.Component {
+      //     // 클래스 컴포넌트에서 사용할 수 있는 defaultProps 설정방법
+      //     static defaultProps = {
+      //         name: '이름없음',
+      //         age: '나이없음'
+      //     }
+
+      //     // state 정의1
+      //     // state = {
+      //     //     count: 0,
+      //     // }
+
+      //     // state 정의2
+      //     constructor(props) {
+      //         super(props);
+      //         this.state = {count: 0}
+      //     }
+
+      //     render() {
+      //         return (
+      //             <>
+      //                 <div>이름은 {this.props.name}이고 나이는 {this.props.age}입니다</div>
+      //                 <p>{this.state.count}</p>
+      //             </>
+      //         )
+      //     }
+
+      //     // 최초로 render함수가 실행된 직후에 호출되는 함수
+      //     componentDidMount() {
+      //         // state 변경
+      //         // 재랜더링되지 않는다
+      //         // setTimeout(() => {
+      //         //     this.state.count += 1;
+      //         // }, 100)
+
+      //         setTimeout(() => {
+      //             // setState1
+      //             // this.setState({
+      //             //     count: this.state.count + 1
+      //             // })
+
+      //             // setState2
+      //             this.setState((prevState) => {
+      //                 const newState = {count: prevState.count + 1}
+      //                 return newState;
+      //             })
+      //         }, 100)
+      //     }
+      // }
+
+      // // 함수형 컴포넌트, 클래스 컴포넌트 모두 사용할 수 있는 defaultProps 설정방법
+      // // Component.defaultProps = {
+      // //     name: '이름없음',
+      // //     age: '나이없음'
+      // // }
+
+      // ReactDOM.render(<Component name="Anana" />, document.querySelector('#root'));
+
+      /* 이벤트 핸들링 */
+      // 함수형 컴포넌트에서 이벤트 핸들링
+      // function Component() {
+      //     return (
+      //         <div>
+      //             <button onClick={() => {
+      //                 // 이벤트 발생시 화면 변경 -> 재랜더링 -> state변경 혹은 props변경
+      //                 console.log('clicked');
+      //             }}>click</button>
+      //         </div>
+      //     )
+      // }
+
+      // 클래스형 컴포넌트에서 이벤트 핸들링
+      class Component extends React.Component {
+        state = {
+          count: 0,
+        };
+
+        // 이벤트 처리함수를 onClick() {..}과 같이 작성했을때 이벤트처리함수에 this를 bind해야한다
+        // constructor(props) {
+        //     super(props);
+        //     this.onClick = this.onClick.bind(this)
+        // }
+
+        // 이벤트 처리함수
+        // 이벤트 처리함수를 화살표 함수로 작성하면 알아서 this를 bind한다
+        onClick = () => {
+          // 이벤트 발생시 화면 변경 -> 재랜더링 -> state변경 혹은 props변경
+          this.setState((prevState) => ({
+            ...prevState,
+            count: prevState.count + 1,
+          }));
+        };
+
+        render() {
+          return (
+            <div>
+              <p>{this.state.count}</p>
+              <button onClick={this.onClick}>click</button>
+            </div>
+          );
+        }
+      }
+
+      ReactDOM.render(<Component />, document.querySelector("#root"));
+    </script>
+  </body>
+</html>

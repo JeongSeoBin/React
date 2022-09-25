@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>React</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            border: 0;
+        }
+        #root p {
+            color: wheat;
+            font-size: 20px;
+            background-color: green;
+            text-align: center;
+            width: 200px;
+        }
+        #btn_plus {
+            background-color: hotpink;
+            border: 2px solid #000000;
+            font-size: 15px;
+            width: 200px;
+        }
+    </style>
+</head>
+<body>
+    <div id="root"></div>
+    <button id="btn_plus">+</button>
+    
+    <!-- cdn을 통해 리액트 라이브러리를 이용하는 방법 -->
+    <script crossorigin src="https://unpkg.com/react@17/umd/react.development.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@17/umd/react-dom.development.js"></script>
+    <script type="text/javascript">
+        // cdn추가로 React, ReactDOM을 가져올 수 있다
+        // console.log(React);
+        // console.log(ReactDOM);
+
+
+        /* 직접 dom을 조작하는 개발 방법 */
+        // const root = document.querySelector('#root');
+        // const btn_plus = document.querySelector('#btn_plus');
+
+        // let i = 0;
+
+        // root.innerHTML = '<p>init: 0</p>';
+        // btn_plus.addEventListener('click', () => {
+        //     root.innerHTML = `<p>init: ${++i}</p>`
+        // })
+
+
+        /* 컴포넌트를 이용한 개발 방법 */
+
+        // component
+        // - 데이터를 가지고 있고 이 데이터의 값은 변경될 수 있다
+        // - 데이터의 상태에 따라 화면에 어떻게 랜더링할지 정의
+        // const component = {
+        //     message: 'init',
+        //     count: 0,
+        //     render() {
+        //         return `<p>${this.message}: ${this.count}</p>`
+        //     }
+        // }
+
+        // 랜더
+        // function render(rootElement, component) {
+        //     rootElement.innerHTML = component.render()
+        // }
+
+        // // 초기화
+        // render(document.querySelector('#root'), component);
+
+        // document.querySelector('#btn_plus').addEventListener('click', () => {
+        //     // componet의 데이터 상태 변경
+        //     component.message = 'update'
+        //     component.count = component.count + 1;
+
+        //     // 다시 랜더링
+        //     render(document.querySelector('#root'), component);
+        // })
+
+
+        /* react를 이용한 개발 방법 */
+
+        // Component: 외부에서 전달받은 데이터를 가지고 랜더링할 내용을 정의
+        const Component = props => {
+            // react component는 react element를 랜더해야한다 -> React.createElement()
+            // React.createElement((1), (2), (3))) => <p(1) (2)>(3)</p>
+            return React.createElement('p', null, `${props.message}: ${props.count}`)
+        }
+
+        // 랜더
+        // ReactDOM.render(react 컴포넌트, react 컴포넌트가 그려질 dom)
+        // React.createElement(Component, {message: 'init', count: 0}, null) -> <Component message='init' count: 0 />
+        ReactDOM.render(
+            React.createElement(
+                Component, 
+                {message: 'init', count: 0}, 
+                null
+            ), 
+            document.querySelector('#root')
+        );
+
+        document.querySelector('#btn_plus').addEventListener('click', () => {
+            // 재랜더링
+            // 기존에 그린 것과의 차이를 다시 그린다 -> virtual dom
+            // React.createElement()로 생성된 element는 가상 돔을 가지고 있다가 변경이 생기면 실제 dom에 반영을 해줌
+            ReactDOM.render(
+                React.createElement(
+                    Component, 
+                    {message: 'update', count: 10}, 
+                    null
+                ), 
+                document.querySelector('#root')
+            );
+        });
+    </script>  
+</body>
+</html>

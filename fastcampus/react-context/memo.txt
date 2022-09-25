@@ -1,0 +1,46 @@
+# 컴포넌트 간 통신
+- 하위 컴포넌트 변경하기
+props를 통해 전달
+상위에서 데이터 상탤르 변경하여 props가 변경되므로 하위 컴포넌트들이 리랜더링되면서 맨 마지막 컴포넌트까지 변경
+- 상위컴포넌트 변경하기
+상위 컴포넌트에서 상태를 변경하는 함수를 작성하고 이 함수를 props로 넘겨 하위 컴포넌트에서 실행
+
+=> 컴포넌트 깊이가 깊다면 중간 단계의 컴포넌트들은 사용하지도 않는 데이터를 받아 더 하위 컴포넌트에게 전달해야 한다
+
+# context api
+일반적인 react 애플리케이션에서 데이터는 위에서 아래로 props를 통해 전달되지만 
+여러 컴포넌트들에게 전달해야 할 경우 context api를 이용하면, 트리단계마다 rpops로 넘겨 주지 않아도 많은 컴포넌트가 데이터를 고유할 수 있다
+
+# 데이터 set하기
+- context 생성 -> context api
+- 최상위 컴포넌트를 context.provider 컴포넌트로 감싼다
+- value props를 사용하여 프로바이더에게 데이터를 넣어준다
+
+    <PersonContext.Provider value={persons}>
+      <App />
+    </PersonContext.Provider>
+
+# 데이터 get하기
+모든 프로바이더의 하위 컴포넌트에서 프로바이더가 제공하는 데이터를 사용할 수 있다
+
+- 컨슈머 (Example1 컴포넌트) 
+  - 컨텍스트가져오기
+    <PersonContext.Consumer></PersonContext.Consumer> 
+  - 컨텍스트 사용하기
+    함수 인자에 프로바이더가 제공하는 데이터가 넘어 온다
+    <PersonContext.Consumer>
+        {(persons) => {}}
+    </PersonContext.Consumer>
+
+- class (Example2 컴포넌트) 
+  - 컨텍스트 가져오기
+    static contextType = PersonContext;
+    contextType을 여러개 지정할 수 없기 때문에 여러 context를 동시에 사용할 수 없다
+  - 컨텍스트 사용하기
+    const persons = this.context => value
+
+- 함수 (Example3 컴포넌트)
+  - 컨텍스트 가져오기
+    useContext(PersonContext)
+  - 컨텍스트 사용하기
+    useContext()의 리턴이 value
