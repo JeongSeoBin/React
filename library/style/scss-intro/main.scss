@@ -1,0 +1,341 @@
+
+// 변수에 색상을 담는다
+$color: royalblue;
+
+// 중첩 기능 -> .container 안에 h1
+.container {
+    h1 {
+        color: $color;
+        background-color: orange;
+        font-size: 60px;
+    }
+}
+
+.container {
+    ul {
+        li {
+            font-size: 40px;
+            .name {
+                color: royalblue
+            }
+            .age {
+                color: salmon;
+
+            }
+        }
+    }
+}
+
+// 중첩
+// 상위 선택자를 반복적으로 작성할 필요없다 
+/*
+    (자손 선택자를 표현)
+    .container ul li {
+        font-size: 40px;
+    }
+
+*/
+.container {
+    ul {
+        li {
+            font-size: 40px;
+        }
+    }
+}
+
+/*
+    (자식 선택자를 표현)
+    .container > ul li {
+        font-size: 40px;
+    }
+
+*/
+.container {
+    > ul {
+        li {
+            font-size: 40px;
+        }
+    }
+}
+
+
+// 상위 선택자 참조 (&)
+// &기호가 상위선택자를 참조(치환)한다
+/*
+    .btn.active {
+        color: red
+    }
+
+    .list li:last-child {
+        margin: 0
+    }
+
+    .fs-small {}
+    .fs-medium {}
+    .fs-large {}
+*/
+.btn {
+    &.active {
+        color: red
+    }
+}
+
+.list {
+    li {
+        &:last-child {
+            margin: 0
+        }
+    }
+}
+
+.fs {
+    &-small {
+        font-size: 10px;
+    }
+    &-medium {
+        font-size: 25px;
+    }
+    &-large {
+        font-size: 35px;
+    }
+}
+
+// 중첩된 속성
+// 네임스페이스로 속성을 묶을 수 있다
+// * 네임스페이스: 이름을 통해 구분가능한 범위를 만들어내는 것으로 일종의 유효범위를 지정하는 방법
+/*
+    .box {
+        font-weight: bold;
+        font-size: 10px;
+        font-family: sans-serif;
+        margin-top: 20px;
+        margin-left: 20px;
+        padding-top: 10px;
+        padding-bottom: 40px;
+        padding-left: 20px;
+        padding-right: 30px;
+    }
+*/
+
+.box {
+    font: {
+        weight: bold;
+        size: 10px;
+        family: sans-serif;
+    };
+    margin: {
+        top: 10px;
+        left: 20px;
+    }
+    padding: {
+        top: 10px;
+        bottom: 40px;
+        left: 20px;
+        right: 30px;
+    }
+};
+
+
+// 변수
+// 반목되는 수치나 페이지의 메인 색상 등을 변수에 담아 재활용성과 효율성을 높일 수 있다
+// 변수의 유효범위
+// 변수가 선언된 중괄호 내에소만 변수를 사용할 수 있다 
+.container {
+    $size: 100px;
+    position: fixed;
+    top: $size;
+    .item {
+        // 변수 재할당
+        $size: 100px;
+        width: $size;
+        height: $size;
+        transform: translateX($size)
+    }
+    left: $size // 100px
+}
+
+
+// 산술연산
+// 나누기 연산은 작동하지 않는다
+// css에는 단축 속성이 존재하므로 이와 혼동됭어 나누기 연산이 작동되지 않는다
+// 실제 나누기 연산을 하는 방법
+// 1. ()로 묶는디
+// 2. 변수를 사용한다
+div {
+    $size: 30px;
+    width: 20px + 20px; //40px
+    height: 40px - 10px; //30px
+    font-size: 10px * 2; //20px
+    margin: 30px / 2; //30px/2
+    // 나누기 방법 1
+    margin: (30px / 2);
+    // 나누기 방법 2
+    margin: $size / 2;
+    padding: 20px % 7 //6px
+}
+.span {
+    font-size: 10px;
+    line-height: 10px;
+    font-family: serif;
+    // 단축 속성 font-size / line-height fontfamily
+    font: 10px / 10px serif;
+}
+
+
+// @mixin
+// 재활용할 코드를 @mixin으로 묶고 @include를 재활용 코드를 사용한다
+@mixin center {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.container {
+    @include center;
+    .item {
+        @include center;
+    }
+}
+
+.box {
+    @include center
+}
+
+// 코드 내부 값을 인수를 활용하여 동적으로 처리할 수 있다
+// default 값도 지정할 수 있다
+@mixin  box($size: 100px, $color: tomato) {
+    width: $size;
+    height: $size;
+    background-color: $color;
+}
+
+.container {
+    @include box(200px, red);
+    .item {
+        // 두번째 인수만 지정하고 찻반째 인수는 디폴트값을 쓰고 싶을때
+        // -> 키워드 인수 방식: 인수의 순서와 상관없이 해당 키로 매칭되어 값을 전달
+        @include box($color: green)
+    }
+}
+.box {
+    // 인수를 전달하지 않은 경우 디폴트값을 사용
+    @include box;
+}
+
+
+// 빈복문
+@for $i from 1 through 10 { // 1부터 10까지 반복
+    // 선택자내 실제 데이터를 가져오기 위해서는 #{}으로 감싸야한다
+    .box:nth-child(#{$i}) {
+        width: 100px * $i;
+    }
+}
+
+
+// 함수
+// @mixin은 반복되는 css 코드 모음울 묶는 기능
+// @function은 연산을 하여 결과를 반환하는 기능
+@mixin center {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+@function ratio($size, $ratio) {
+    @return $size * $ratio
+}
+
+.box {
+    $width: 100px;
+    width: $width;
+    // 함수 호출
+    height: ratio($width, 1/2);
+    @include center;
+}
+
+
+// 색상 내장 함수
+// mix(): 두 색상을 섞어 새로운 색상을 만든다
+// lighten(color, mount): color를 mount만큼 밝힌다
+// darken(color, mount): color를 mount만큼 어둡게 한다
+// saturate(color, mount): color의 채도를 mount만큼 밝힌다
+// desaturate(color, mount): color의 채도를 mount만큼 낮춘다
+// grayscale(color): color를 회색빛으로 만든다
+// invert(color): color를 반전
+// rgba(color, .5): color에 투명도 추가
+.box {
+    $color: royalblue;
+    width: 200px;
+    height: 100px;
+    margin: 20px;
+    border-radius: 10px;
+    background-color: $color;
+    &:hover {
+        background-color: darken($color, 10%);
+    }
+    &.built-in {
+        background-color: mix($color, red);
+    }
+}
+
+
+// 데이터 종류
+$number: 1; //.5 5px 1em
+$string: bold;
+$color: red; // #ff0000 rgba(0,0,0,1)
+$boolean: true;
+$null: null;
+$list: orange, royalblue, pink;
+$map: (
+    o: orange,
+    r: royalblue,
+    p: pink
+);
+
+.box {
+    width: 100px;
+    color: red;
+    position: relative;
+}
+
+
+// @each
+// list나 map을 반복할 수 있다
+// $list의 데이터를 하나씩 꺼내어 $c로 담는다
+@each $c in $list {
+    .box {
+        color: $c
+    }
+}
+
+@each $key, $value in $map {
+    .box-#{$k}{
+        color: $v;
+    }
+}
+
+
+// @content
+// @mixin내부에 @content를 작성하면 @mixin을 사용하는 부분에서 @content를 채워 줄 수 있다
+@mixin left-top {
+    position: absolute;
+    top: 0;
+    left: 0;
+    @content;
+}
+
+.container {
+    width: 100px;
+    height: 100px;
+    @include left-top;
+}
+
+.box {
+    width: 200px;
+    height: 300px;
+    @include left-top {
+        bottom: 0;
+        right: 0;
+        margin: auto;
+    }
+}

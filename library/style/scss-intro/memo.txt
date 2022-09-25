@@ -1,0 +1,29 @@
+# scss
+- css 전처리 도구
+- sass로 작성된 문법은 컴파일을 통해 브라우저에서 동작할 수 있는 css로 변환
+- sass와 scss 두가지 문법이 제공된다
+  * sass와 scss
+    - sass가 기존 css와 호환문제가 있어 이를 개선한 문법이 scss이다
+    - sass는 중괄호나 ;이 없고 scss는 중괄호나 ;이 있다
+    - scss @mixin === sass =
+      scss @include === sass +
+
+# parcel bundler
+- scss 문법을 css로 변환
+- npm install -D parcel-bundler
+- package.json수정
+  "scripts": {
+    "dev": "parcel index.html",
+    "build": "parcel build index.html"
+  },
+- npm run dev
+  dist폴더 안에 scss파일이 변환되어 css파일이 생성된 것을 확인할 수 있다
+  sass파일을 확인하고 필요한 모듈(scss)알아서 설치
+
+# 주석
+/* */: scss를 css로 변환한 파일에서도 볼 수 있음
+//: scss를 css로 변환한 파일에서 보여지지 않음
+
+# sassmeister
+https://sassmeister.com
+sass converter(to css)

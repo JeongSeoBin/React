@@ -1,0 +1,17 @@
+// scss파일 가져오기
+// url()을 통해 가죠올 수 있다
+// @import url("./sub.scss");
+// url 생략 가능하다
+// @import "./sub.scss";
+// 확장자 생략 가능하다
+@import "./sub";
+// 여러 파일을 ","로 구분하여 가져올 수 있다
+@import "./sub", "./sub2";
+
+$color: royalblue;
+
+.container {
+    h1 {
+        color: $color ;
+    }
+}
