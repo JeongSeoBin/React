@@ -1,0 +1,23 @@
+"@testing-library/jest-dom": "^5.16.2",
+"@testing-library/react": "^12.1.2",
+"@testing-library/user-event": "^13.5.0",
+=> cra에서 기본적으로 셋팅되어 있는 테스트 라이브러리
+
+
+# testing-library/react 를 이용하여 컴포넌트 테스트하기
+- 테스트 사항 (Button component)
+1. 컴포넌트가 정상적으로 생성된다
+2. "button"이라고 쓰여있는 엘리먼트는 HTMLButtonElement 이다
+3. 버튼을 클리하면 p태그안에 "버튼이 방금 눌렸다"라고 쓰여진다
+4. 버튼을 클릭하기 전에는 p태그 안에 "버튼이 눌리지 않았다"라고 쓰여진다
+5. 버튼을 클릭하고 5초 뒤에는 p태그안에 "버튼이 눌리지 않았다"라고 쓰여진다
+6. 버튼을 클릭하면 5초 동안 버튼이 비활성화 된다
+
+
+# testing-library/jest-dom
+- expect()의 더 다양한 함수를 제공
+- dom과 관련한 함수를 제공
+
+
+# testing-library/user-event
+- 사용자 이벤트 테스트를 위한 라이브러리
