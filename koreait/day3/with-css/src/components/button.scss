@@ -1,0 +1,80 @@
+//색상을 변수에 저장
+$blue: #228be6;
+$gray: #495057;
+$pink: #f06595;
+
+//@mixin: 반복적인 코드 를 방지하기 위해 사용
+@mixin button-color($color){
+    background-color: $color;
+
+    //&:hover: hover됐을때
+    &:hover {
+        //lighten(color, amount): color보다 amount만큼 밝은 색상
+        background-color: lighten($color, 10%);
+    }
+    &:active {
+        //darken(color, amount): color보다 amount만큼 어두운 색상
+        background-color: darken($color, 10%);
+    }
+}
+
+.Button {
+    display: inline-flex;
+    color: white;
+    font-weight: bold;
+    outline: none;
+    border-radius: 4px;
+    border: none;
+    cursor: pointer;
+
+    //&.클래스명: 해당 클래스를 가질때
+    &.large {
+        height: 3rem;
+        padding-top: 0.6rem;
+        padding-left: 1rem;
+        padding-right: 1rem;
+        font-size: 1.25rem;
+    }
+    &.medium {
+        height: 2.25rem;
+        padding-top: 0.5rem;
+        padding-left: 1rem;
+        padding-right: 1rem;
+        font-size: 1rem;
+    }
+    &.small {
+        height: 1.75rem;
+        padding-top: 0.3rem;
+        padding-left: 1rem;
+        padding-right: 1rem;
+        font-size: 0.85rem;
+    }
+
+    &.blue {
+        //@include: @mixin 적용
+        @include button-color($blue);
+    }
+
+    &.gray {
+        @include button-color($gray);
+    }
+
+    &.pink {
+        @include button-color($pink);    
+    }
+
+    //버튼끼리 사이 여백
+    & + & {
+        margin-left: 1rem;
+    }
+
+    &.fullWidth {
+        width: 100%;
+        justify-content: center;
+        
+        & + & {
+            margin-left: 0;
+            margin-top: 1rem;
+        }
+    }
+}
