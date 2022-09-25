@@ -1,0 +1,68 @@
+import React, { useState, useEffect } from "react";
+import { tvDataApi, commentsApi } from "./helpers/Api";
+import { Spinner } from "./Spinner";
+
+const Comments = ({ id }) => {
+  const [comments, setComments] = useState(null);
+
+  // 5. 4에서 랜더링되면서 comment api호출
+  useEffect(() => {
+    setComments(null);
+    commentsApi(id).then((value) => {
+      // 6. api 호출이 완료되면 상태를 변경하여 재랜더링
+      setComments(value);
+    });
+  }, [id]);
+
+  if (comments === null) return <Spinner />;
+
+  const commentsArr = comments.map((comment) => (
+    <div className="comment" key={comment.id}>
+      <h4>{comment.title}</h4>
+      <div className="text">{comment.text}</div>
+    </div>
+  ));
+
+  return (
+    <div className="flex flex-col comments">
+      <h3>Comments</h3>
+      {commentsArr}
+    </div>
+  );
+};
+
+export const TvShowDetails = ({ id }) => {
+  const [tvData, setTvData] = useState(null);
+
+  // 2. 최초 랜더링 후 tvData api호출
+  useEffect(() => {
+    setTvData(null);
+    tvDataApi(id).then((value) => {
+      // 3. api호출이 완료되면 상태를 변경하여 재랜더링
+      setTvData(value);
+    });
+  }, [id]);
+
+  // 1. TvShowDetails가 최초 랜더링시 tvData가 null이므로 Spinner 랜더
+  if (tvData === null) return <Spinner />;
+
+  return (
+    <div className="tvshow-details">
+      <div className="flex">
+        <div>
+          <h2>{tvData.name}</h2>
+          <div className="details">{tvData.description}</div>
+        </div>
+        <div>
+          <img
+            src={`https://res.cloudinary.com/dqsubx7oc/image/upload/w_200/v1582908284/tv-shows/${id}.jpg`}
+            alt={tvData.name}
+          />
+        </div>
+      </div>
+      {/* 4. 3에서 재랜더링 시 tvData만 값이 있고 Comment는 최초 랜더링이므로 Spinner 랜더 */}
+      {/* 7. 6에서 재랜더링하여 comment데이터 랜더링 */}
+      <Comments id={id} />
+    </div>
+  );
+};

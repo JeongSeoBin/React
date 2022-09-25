@@ -1,0 +1,101 @@
+# React ConCurrent Mode
+동시성이란?
+프로그램을 독립적으로 실행할 수 있는 조각으로 나누어 구조화하는 방법
+단일 스레드의 한계를 깨고 애플리케이션을 보다 효율적으로 만드는 방법
+
+- 사용자 경험의 완성에 관한 모든 것
+  react가 reconciliation(변경사항 -> virtual dom과 비교 -> 재렌더링)단계를 시작하면 완료될때까지 멈출 수 없다
+  그러면 ui스레드는 사용자 입력 수신과 같은 다른 작업을 수행할 수 없다
+  react의 reconciliation 알고리즘이 아무리 효율적이더라도 dom트리가 커지면 버벅거림, 응답하지 않는 프레임 드롭과 같은 문제가 발생할 수 있다
+
+  * ui 스레드: css, 사용자 입력, js에 의해 시작된 모든 변경사항을 사용자 화면에 적용하는 역할을 한다
+
+  => ConCurrent React
+     렌더링 프로세스를 더 작은 작업으로 세분화하고 스케줄러를 사용하여 중요도에 따라 우선순위를 지정
+     -> 더이상 렌더링 프로세스가 스레드를 차단하지 않으며 사용자가 키를 누르는 것과 같이 더 중요한 일이 발생하면 제쳐 둘 수 있다
+     -> 트리를 부분적으로 렌더링할 수 있다
+
+
+# React ConCurrent Mode 적용
+- useDeferredValue
+  prop/state값을 감싸고 최대 지연시간을 수신하는 hook
+  react에게 "이 값에 의존하는 구성요소는 나중에 랜더링되도 괜찮아"라는 뜻
+  (만약 제공된 시간 준비가 되면 dom에 대한 변경사항을 플러시한다)
+
+    import { useState, useDeferredValue } from 'react';
+
+    const [value, setValue] = useState('');
+    const deferredValue = useDeferredValue(value, {
+        timeoutMs: 5000
+    });
+
+- Suspense
+  현재 데이터가 로드되는 동안 자리 표시자를 표시하는 통합된 방법을 제공
+  동시모드 기능을 사용하여 구성요소 렌더링을 시작하여 api호출을 시작하고 그동안 자리 표시자를 표시할 수 있다
+
+    const Comments = ({ id }) => {
+        const commentsResource = getCommentsResource(id).read();
+        const comments = commentsResource.map(comment => (
+            <div className="comment" key={comment.id}>
+            <h4>{comment.title}</h4>
+            <div className="text">{comment.text}</div>
+            </div>
+        ));
+
+        return (
+            <div className="flex flex-col comments">
+            <h3>Comments</h3>
+            {comments}
+            </div>
+        );
+    };
+
+    const Details = ({ id }) => {
+        const tvShowResource = getTvDataResource(id).read();
+        return (
+            <div className="flex">
+            <div>
+                <h2>{tvShowResource.name}</h2>
+                <div className="details">{tvShowResource.description}</div>
+            </div>
+            <div>
+                <img
+                src={`https://res.cloudinary.com/dqsubx7oc/image/upload/w_200/v1582908284/tv-shows/${id}.jpg`}
+                alt={tvShowResource.name}
+                />
+            </div>
+            </div>
+        );
+    };
+
+    export const TvShowDetails = ({ id }) => {
+        return (
+            <div className="tvshow-details">
+            <Suspense fallback={<Spinner />}>
+                <Details id={id} />
+                <Suspense fallback={<Spinner />}>
+                <Comments id={id} />
+                </Suspense>
+            </Suspense>
+            </div>
+        );
+    };
+
+* 코드분할
+  https://ko.reactjs.org/docs/code-splitting.html
+  번들링을 통해 여러 파일을 하나로 합치는데 앱이 커지면 번들도 커진다
+  번들이 거대해지는 것을 방지하는 방법은 번들을 나누는 것이다
+  코드분활은 여러 번들을 동적으로 만들고 불러오는 것으로 webpack, rollup과 같은 번들러가 지원하는 기능이다
+  앱의 코드 양을 줄이지 않고도 사용자가 필요로 하지 않은 코드를 사용자가 필요하지 않는 코드를 불러오지 않게 하며 앱의 초기화 로딩 비용을 줄인다
+
+* React.lazy suspense
+  https://ko.reactjs.org/docs/concurrent-mode-suspense.html
+  코드를 불러오는 동안 기달리 수 있고 기다리는 동안 로딩상태(스피너)를 지정할 수 있다
+  데이터 로딩, 이미지, 스크립트, 비동기 작업을 기다리는 데에도 사용할 수 있다
+  
+  const ProfilePage = React.lazy(() => import('./ProfilePage')); // 지연 로딩
+
+  // 프로필을 불러오는 동안 스피너를 표시합니다
+  <Suspense fallback={<Spinner />}>
+    <ProfilePage />
+  </Suspense>

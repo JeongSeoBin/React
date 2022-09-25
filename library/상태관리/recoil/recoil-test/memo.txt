@@ -1,0 +1,76 @@
+recoil
+- recoil을 사용하면 atoms애서 selector를 거쳐 react 컴포넌트로 내려가는 data flow graph를 만들 수 있다
+
+# RecoilRoot
+- recoil 상태를 사용하는 최상위 컴포넌트를 <RecoilRoot></RecoilRoot>로 감싼다
+# atoms
+- 컴포넌트가 구독할 수 있는 상태의 단위
+- atoms는 react의 로컬 컴포넌트의 상태를 대신할 수 있다
+- 업데이트와 구독이 가능하다
+- atom이 업데이트되면 각각의 구독된 컴포넌트는 새로운 값을 반영하여 다시 랜더링
+- 동일한 컴포넌트에서 사용되는 경우 모든 컴포넌트는 상태를 공유한다
+- atoms는 런타임에도 생성할 수 있다
+
+const fontSizeState = atom({
+    key: 'fonSizeState', //전역적으로 고유한 키값을 갖는다
+    default: 14 //react컴포넌트의 상태처럼 기본값을 가진다
+})
+
+
+# useRecoilState()
+- 컴포넌트에서 atom울 앍고 쓸때 사용하는 hook
+- react의 useState와 비숫하지만 상태가 컴포넌트 간에 공유될 수 있다는 차이가 있다
+
+function FontButton() {
+    const [fontSize, setFontSize] = useRecoilState(fonSizeState);
+
+    return (
+        <button onClick={() => {
+            setFontSize(size => size+1)
+        }} style={{fontSize}}>click</button>
+    )
+}
+
+
+# selector
+- atoms나 다른 selector를 입력으로 받아 들이는 함수
+- atoms 상태값을 동기 또는 비동기 방식을 통해 변환
+- 최소한의 상태만 atoms에 저장하고 파생 데이터는 selector 함수에서 상태를 기반으로 계산
+
+- 컴포넌트 관점에서 보면 selector와 atoms는 서로 대체할 수 있다
+- 컴포넌트들은 selector를 atoms처럼 구독할 수 있다
+- 상위 atoms 또는 selector가 업데이트되면 하위의 selector함수도 다시 실행
+- selector가 변경되면 컴포넌트들도 다시 렌더링된다
+
+- selector는 어떤 컴포넌트가 자신을 필요로 하는지, 자신은 어떤 상태에 의존하는지 추적
+
+const fontSizeLabelState = selector({
+    key: 'fontSizeLabelState',
+    // 파생 데이터를 계산하는 함수
+    // 전달돠는 get인자를 통해 atoms와 서로 다른 selector에 접근할 수 있다
+    // 참조한 atoms나 selector가 업데아트되면 이 함수도 자동으로 다시 실행
+    get: ({get}) => {
+        const fontSize = get(fontSizeState);
+        const unit = 'px';
+
+        return '${fontSize}${unit}'
+    }
+})
+
+# useRecoilValue()
+- 컴포넌트에서 selector를 읽을때 사용하는 hook
+- 하나의 atom이나 selector를 인자로 받아 대응하는 값을 반환
+
+function FontButton() {
+    const [fontSize, setFontSize] = useRecoilState(fonSizeState);
+    const fontSizeLabel = useRecoilValue(fontSizeLabelState);
+
+    return (
+        <>
+            <div>current font size : {fontSizeLabel}</div>
+            <button onClick={() => {setFontSize(size => size+1)}} style={{fontSize}}>
+                click
+            </button>
+        </>
+    )
+}
