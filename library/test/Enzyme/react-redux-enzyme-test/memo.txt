@@ -1,0 +1,11 @@
+https://www.digitalocean.com/community/tutorials/react-testing-react-redux-with-jest-enzyme 
+위 블로그를 참고한 practice입니다.
+- Installation & Setup
+- Testing React Components
+- Testing Redux Actions
+- Testing Redux Reducers
+
+shallow: 현 노드를 랜더하고 shallow wrapper를 리턴한다. 이는 자식 컴포넌트를 신경쓰지 않고 현 컴포넌트만 유닛 테스트할수 있게 해준다
+toJson: wrapper를 jest snapshot testing과 호환이 가능한 포멧으로 변환해주는 역할임.
+configurStore: store와 connected된 컴포넌트를 테스트해야 할때 리덕스 스토어와의 상호작용을 mocking할 수 있음.
+dive: returns non-DOM child of the current wrapper

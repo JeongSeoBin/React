@@ -1,0 +1,11 @@
+# React에서의 단위 테스트
+- testing basic component rendering
+- testing props
+- testing state
+- testing event handlers
+
+# react redux test
+- 액션 생성함수, 의도한 액션을 만들어 내는지 (o)
+- 리듀서, 상태와 액션에 따라 의도대로 업데이트 하는지 (o)
+- 컴포넌트 렌더링, props에 따라 제대로 화면을 보여주는지
+- dispatch, 특정 이벤트나 상황에 dispatch를 날리는지
