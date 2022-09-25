@@ -1,0 +1,27 @@
+# redux-actions
+- ducks-pattern을 쉽게 구현할 수 있도록 도와주는 라이브러리
+
+# createAction(action type)
+- 지정한 type의 액션을 생성하는 함수를 리턴
+- createAction(type)()
+  리턴결과: {
+            type: type
+          }       
+- createAction(type)(payload)
+  리턴 결과: {
+             type: type,
+             payload: payload
+           }
+
+# createActions('type1', 'type2', {prefix})
+- 리턴결과: {
+            // 액션 생성 함수: { type: prefix/type }과 같이 prefix로 액션 객체를 생성하는 함수
+            type1: 액션 생성 함수,
+            type2: 액션 생성 함수
+          }
+
+# handleActions()
+- handleActions({
+    // 액션 생성 시 type: 액션 발생시 실행할 내용
+    type: (state, action) => new State
+}, initialState, {prefix})

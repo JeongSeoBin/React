@@ -1,0 +1,10 @@
+# combineReducer
+- state가 복잡해지고 여러 action을 정의하게 되면 이를 처리하는 reduer가 복잡해질 수 있다
+- 따라서 reducer를 분리하고 이들을 하나로 합친 root reducer를 만든다
+- 
+  combineReducer({
+    key: 하위 reducer
+  })
+
+  reducer를 분리하고 이들을 객체 형태로 헙쳐 combineReducer를 통해 하나로 만든다
+  store는 이를 가진다

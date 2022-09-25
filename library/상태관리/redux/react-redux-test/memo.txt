@@ -1,0 +1,59 @@
+# react-redux 안쓰고 redux와 react 연결하기
+- store와 context api를 이용하여 react와 redux를 연결한다
+
+    1. redux를 이용하여 store를 생성한다
+    2. context api를 이용하여 store를 전역에서 관리한다
+    3. 각 컴포넌트에서 store를 가져와 상태를 조회 및 변경을 한다
+
+# reatc-redux를 이용하여 redux와 react 연결하기
+-
+    1. redux를 이용하여 store를 생성한다
+    2. redux에 제공하는 provider 컴포넌트를 통해 store를 전역에서 사용할 수 있도록 한다
+    3. component를 만든다
+       이 컴포넌트는 presentation 컴포넌트로, container로부터 상태와 함수를 전달받아 보여주거나 실행
+       디자인 ui요소를 주로 담은 컴포넌트
+    4. container를 만든다
+       컨테이너는 스토어의 state와 dispatch를 컴포넌트에 props로 넣어주는 역할을 한다
+       store와 component를 연결해주는 역할을 한다
+
+       - 컨테이너를 만드는 방법
+            1. connect함수를 이용하는 방법
+                const mapStateToProps = (state) => {
+                    return {
+                        // 컴포넌트에서는 객체의 키를 props로 받는다
+                        todos: state.todos
+                    }
+                }
+
+                const mapDispatchToProps = (dispatch) => {
+                    return {}
+                }
+
+                // connect(): 실행결과는 hoc함수, hoc함수 실행결과는 컨테이너
+                const TodoListContainer = connect(
+                    // store의 state 중 어떤걸을 props로 전달할 것인가
+                    mapStateToProps,
+                    // store의 액션 중 어떤 것을 props로 전달할 것인가
+                    mapDispatchToProps
+                )(TodoList)
+
+            2. useSelector를 이용하는 방법
+                function TodoListContainer() {
+                    // store에서 필요한 state를 꺼내는 훅
+                    const todos = useSelector(state => state.todos)
+
+                    // store에서 꺼낸 state를 컴포넌트에게 props로 넘겨준다
+                    return <TodoList todos={todos}/>
+                }
+
+                function TodoFormContainer() {
+                    // store에서 dispatch를 꺼낸다
+                    const dispatch = useDispatch();
+
+                    const add = useCallback(text => {
+                        dispatch(addTodo(text))
+                    }, [dispatch])
+
+                    // store에서 꺼낸 dispatch를 컴포넌트에게 props로 넘긴다
+                    return <TodoForm add={add}/>
+                }

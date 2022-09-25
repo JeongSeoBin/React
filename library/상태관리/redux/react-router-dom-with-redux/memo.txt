@@ -1,0 +1,13 @@
+# redux-thunk middleware에서 페이지 이동하는 방법
+(reudx와 라우터 처리된 프로젝트에 적용하기)
+1. thunk.withExtraArgument({history}) (store.js)
+- withExtraArgument
+  argument를 미들웨어에서 활용할 수 있다
+- history 
+  히스토리 객체 생성 (history.js)
+  - const history = createBrowserHistory();
+  생성하 히스토리 객체가 브라우저 히스토리 객체와 호환되기 위한 작업이 필요 (App.js)
+  - 직접 생성한 히스토리 객체를 사용할 경우 <BrowserRouter></BrowserRouter>대신 <Router></Router>로 <Route/>들을 감싼다
+  - <Router></Router> props로 history객체를 넘긴다
+2. middleware에서 페이지 이동 (/modules/users.js)
+thunk middelware안에서 withExtraArgument를 가져와 history객체를 꺼내고 이를 이용하여 페이지를 이동할 수 있다
