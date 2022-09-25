@@ -1,0 +1,11 @@
+$color--black: #000;
+$color--pink: pink;
+
+body {
+    background-color: $color--pink;
+    h1 {
+        color: $color--black;
+        font-size: 40px;
+        display: flex;
+    }
+}

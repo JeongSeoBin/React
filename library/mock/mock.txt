@@ -1,0 +1,30 @@
+# Mock Servie Worker
+https://mswjs.io/
+Service Worker API를 사용하여 실제 요청을 가로채는 API 모의 라이브러리
+
+* service Worker
+웹, 브라우저 및 네트워크 사이에 있는 프록시 역할을 한다
+네트워크 요청을 가로채고 네트워크 사용가능 여부에 따라 적절한 조치를 취할 수 있다
+mock이 있든없든 동일한 동작을 보장
+mock에 의해 애플리케이션 코드를 변경할 필요없다
+
+- 사용하는 이유
+https://blog.rhostem.com/posts/2021-03-20-mock-service-worker에서 활용사례 참조
+
+
+# install
+npm install msw --save-dev
+
+
+# Mocking REST API
+- handler (handler.js)
+- Worker (brower.js)
+- Worker start (index.js) 
+
+
+# Integrate
+동일한 request handler가 브라우저와 node환경에서 공유될 수 있다
+service worker가 node환경에서 동작할 수 없기 때문에 통합과정이 실행환경에 따라 다르다
+
+- 브라우저 환경 + react
+npx msw init public/ --save

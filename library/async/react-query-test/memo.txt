@@ -1,0 +1,116 @@
+https://maxkim-j.github.io/posts/react-query-preview
+
+# react-query
+- react 앱에서 비동기 로직을 쉽게 다루게 해주는 라이브러리
+
+# 데이터 요청
+- redux와 같은 상태관리 라이브러리들은 클라이언트 상태값에 대해서는 잘 작동하지만 서버 상태에 대해서는 잘 작동하지 않는다
+  - 서버 데이터는 항상 최신 상태임을 보장하지 않는다. 
+  - 명시적으로 fetching을 수행해야만 최신 데이터로 전환한다
+    => "refetch"
+  - 네트워크 통신은 최소한으로 줄이는게 좋은데 복수의 컴포넌트에서 최신 데이터를 받아오기 위해 fetching을 여러번 수행하는 낭비가 발생할 수 있다
+    => "캐싱"
+
+  * refetch
+    refetching이 일어나는 경우
+    - 렌더링 간 특정 쿼리 인스턴스가 다시 만들어졌을때 (해당 쿼리가 stale일 경우 캐싱)
+    - window가 다시 포커스가 되었을때
+    - 네트워크가 다시 연결되었을때
+    - refetch interval이 있을때
+    - 요청 실패한 쿼리는 디폴트로 3번 더 백그라운드단에서 요청
+      retry, retryDelay옵션으로 간격, 횟수를 커스텀할 수 있다
+
+    * 캐싱
+      stale된 상태에서 같은 쿼리를 useQuery로 또 호출해 마운트를 시도한다면 캐싱된 데이터가 반환
+
+      * 쿼리 상태
+        query들은 4가지 상태를 가지며 useQuery가 반환하는 객체의 프로퍼티로 어떤 상태인지 확인 가능
+        - fresh: 새롭게 추가된 쿼리 인스턴스, active상태의 시작
+        - fetching: 요청을 수행 중인 쿼리
+        - stale: 인스턴스가 존재하지만 이미 패칭이 완료된 쿼리
+        - inactive: 컴포넌트가 재랜더링되면서 새로운 쿼리가 만들어지고 저번 랜더링에서 호출했던 쿼리들은 inactive된다
+                    즉, 렌더링 간에 다시 호출하되지 않은 쿼리들은 inactive된다
+                    5분 간격으로 아예 gc된다     
+      
+- 비공기관련한 성공, 실패 액션 하나하나 모두 선언할 필요없음
+
+
+# 데이터 관리
+- context
+  context를 사용해 비동기, server state를 관리하는 전역 계층을 제공해 비동기 요청을 관리
+
+- key
+  useQuery를 통해 만들어진 query는 고유한 key로 구분되어 여러개의 쿼리를 컴포넌트 곳곳에 흩뿌려놓아도 key만 같으면 동일한 쿼리와 데이터에 접근할 수 있음
+
+- global state
+  전역 state는 client와 server로 분류할 수 있고 두 state는 다른 방식으로 다뤄져야 효율적인 앱을 만들 수 있다
+
+  server state: 서버에서 가져오는 데이터
+                세션간 지속되는 데이터 
+                비동기적
+                세션을 진행하는 클라이언트만 소유하는 것이 아닌 공유되는 데이터도 존재
+                여러 클라이언트에 의해 수정될 수 있음
+                클라이언트에서는 서버 데이터의 스냅샷만 사용하기 때문에 클라이언트에서 보이는 서버 데이터는 항상 최신임을 보장할 수 없음
+                예) 비동기 요청 데이터, db에 저장되어 있는 데이터
+  client state: 세션간 지속적이지 않는 데이터
+                동기적
+                클라이언트가 소유
+                항상 최신 데이터로 업데이트 (랜더링에 반영)      
+                예) 리액트 컴포넌트 state, 동기적으로 저장되는 redux store  
+
+
+# 사용법
+- context
+  context provider로 이하 컴포넌트를 감싸고 queryClient를 내려보내줌
+  이 context는 앱에서 비동기 요청을 알아서 처리하는 background계층이 됨
+
+  import { QueryClient, QueryClientProvider, useQuery } from 'react-query'
+ 
+  const queryClient = new QueryClient()
+
+  export default function App() {
+    return (
+      <QueryClientProvider client={queryClient}>
+        {*/ ...Components */}
+      </QueryClientProvider>
+    )
+  }
+
+- queries
+  const {status, data, error, isFetching, isPreviousData } = useQuery(
+    ['projects', page],
+    () => fetchprojects(page),
+    {keepPreviousData: true, staleTime: 5000}
+  )
+
+  useQuery인자
+  - key
+    한번 fresh가 되었다면 계속 추적 가능
+    리패칭, 캐시, 공유등을 할때 참조되는 값
+    주로 배열을 사용하고 배열 요소로 쿼리의 문자열 이름, 프로미스를 리턴하는 함수의 인자로 쓰이는 값
+
+    * query key
+      useQuery(['todo', 5, { preview: true }], ...)
+      문자열: 구별되는 문자열로 키를 줄 수 있음. 인자가 하나인 배열로 convert됨
+      배열: 문자열과 함께 숫자를 주면 같은 문자열로 같은 key를 쓰면서도 id로도 구별이 가능함
+      콜백함수에 주는 인자 : 요청 함수 내에서 인자로 객체를 받을 수 있고 그거 가지고 함수 안에서 뭔가 할 수도 있다
+                            역시 쿼리를 구별하는데 쓰임 => 요청에 넣는 body나 쿼리 param이 다르면 다른 쿼리 인스턴스로 취급된다.
+
+  - 프로미스를 리턴하는 함수
+    resolve promise를 리턴하거나 에러를 throw해야 한다
+
+  useQuery 반환 값
+  요청의 상태, 요청 결과, 에러 프로퍼티를 갖는 객체
+  - isLoading: 로딩 중인 상태
+  - isError: 에러가 발생했을때
+  - isSuccess: 요청 성공했을때
+  - isIdle: 쿼리 데이터가 하나도 없고 비었을때
+  - status: loading, error, success, idle 중 하나의 문자열 값을 갖는다 
+  - isFetching, error, data: 요청이 한 번 이상 발생했다면 값이 존재한다
+
+  useQuery 옵션
+  - enabled: true일 경우 자동으로 쿼리 요청 함수가 호출되지 않는다
+  - keepPreviousData: success와 loading 사이 널뛰기 방지
+  - placeholderData: mock데이터 설정 가능, 캐싱 안됨
+  - initialData: 초기값 설정
+  - refetchInterval: refetch data every second

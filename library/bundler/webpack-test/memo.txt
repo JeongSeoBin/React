@@ -1,0 +1,41 @@
+# webpack
+- 설치
+npm i -D webpack webpack-cli webpack-dev-server@next
+
+webpack: bundler가 동작하기 위한 핵심적인 패키지
+webpack-cli: CLI를 지원하는 패키지
+webpack-dev-server: dev명령으로 개발서버를 실행했을때 HMR지원하는 패키지
+
+- package.json
+  "scripts": {
+    "dev": "webpack-dev-server --mode development", // 개발모드
+    "build": "webpack --mode production" // 제품 모드
+  },
+
+# webpack.config.js
+구성 옵션 파일
+parcel과 달리 구성옵션을 수동으로 작성해야한다
+
+- html-webpack-plugin
+개발서버를 오픈하여 webpack프로잭트를 브라우저에서 확인 가능
+
+- copy-webpack-plugin
+지정 폴더를 dist폴더에 넣어주어 정적파일을 가져올 수 있게 해줌
+
+- css-loader, style-loader, sass-loader
+js파일에 style파일을 import하여 가져온다
+-> webpack의 진입 파일에 스타일 파일을 import하면 해당 파일을 읽어 dist폴더에 내어준다
+   하지만 webpack이 css, scss파일을 읽을 수 있는건 아니다
+   -> 별도의 패키지가 필요하다
+      css-loader: 자바스크립트에서 css를 해석하는 용도
+      style-loader: 해석된 css를 html의 <style></style>에 삽입해주는 용도
+      sass-loader: scss파일을 읽어 내는 용도
+      sass: scss문법을 해석하는 용도
+
+- postcss autoprefixer postcss-loader
+postcss: 스타일의 후처리를 도와주는 패키지
+autoprefixer: 공급업체접두사를 자동으로 붙여주는 패키지
+postcss-loader: webpack에서 postcss를 동작시킬 수 있는 패키지
+
+- babel-loader
+webpack에서 babel을 동작시킬 수 있는 패키지
