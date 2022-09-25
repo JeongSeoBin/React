@@ -1,0 +1,95 @@
+* {
+  box-sizing: border-box;
+}
+
+.navbar {
+  font-size: 2rem;
+  padding: 1em;
+  background-color: plum;
+}
+
+.navbar-logo {
+  color:beige;
+  margin-right:0.5em;
+}
+
+.navbar-count {
+  display: inline-block;
+  text-align: center;
+  font-size: 2rem;
+  width: 2.5rem;
+  line-height: 2.5rem;
+  margin-left: 0.2em;
+  margin-right: 0.5em;
+  background-color: rebeccapurple;
+  color: beige;
+  border-radius: 50%
+}
+
+.add-input {
+  margin-top: 2rem;
+  font-size: 2rem;
+}
+
+.add-button {
+  font-size: 1.5rem;
+  padding: 0.3em 0.5em;
+  margin-left: 0.3rem;
+  background-color: rgb(144, 78, 211);
+  color: beige;
+}
+
+.todos-reset {
+  font-size: 1.5rem;
+  padding: 0.2e, 1em;
+  background-color: rgb(144, 78, 211);
+  color: beige;
+}
+
+button {
+  outline: none;
+  border: 0;
+  cursor: pointer;
+}
+
+.todo {
+  font-size: 2.5rem;
+  padding: 0.5em;
+  list-style: none;
+}
+
+.todo-name {
+  font-size: 3.0rem;
+  padding: 0.5em;
+}
+
+.todo-count {
+  display: inline-block;
+  text-align: center;
+  font-size: 2rem;
+  width: 2.5rem;
+  line-height: 2.5rem;
+  margin-left: 0.2em;
+  margin-right: 0.5em;
+  background-color: deepskyblue;
+  color: gold;
+  border-radius: 50%
+}
+
+.todo-button {
+  font-size: 2.5rem;
+  margin: 0 0.1em;
+  background-color: deeppink;
+}
+
+.todo-button:hover{
+  opacity: 0.8;
+}
+
+.todo-increase, .todo-decrease{
+  color:gold
+}
+
+.todo-delete {
+  color:blue
+}

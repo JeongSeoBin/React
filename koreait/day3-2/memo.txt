@@ -1,0 +1,97 @@
+Sass(scss/sass)
+CSS pre-processor
+* CSS pre-processor
+- css 프로그래밍화
+  css는 중복제거가 어렵고 방대한 양때문에 겹치거나 부하도 많이 준다.
+  이런 css를 프로그래밍화하여 중복제거하고 편하게 사용할 수 있게 도와줌
+- css 컴파일
+  Sass코드를 전처리하여 결과로 css코드를 추출함
+
+https://sass-guidelin.es/ko/
+
+설치
+yarn add node-sass
+
+CRA로 만들어진 프로젝트는 5.0버전하고 충돌
+node-sass 삭제
+yarn remove node-sass
+node-sass 4.14.0버전 설치
+yarn add node-sass@4.14.0
+
+* 디자인 옵션(classname)을 props로 받고 sass에서 선택한 옵션(classname)에 따른 디자인을 구현하는 방식으로 구현하면
+  재활용성도 높아지고 효율적으로 작성할 수 있다
+
+
+classnames
+조건부 css 클래스이름 설정 모듈
+https://www.npmjs.com/package/classnames
+
+설치
+yarn add classnames
+
+classnames('Button', 'color') => 'Button color'
+classNames('Button', {outline: true}); => 'Button outline'
+
+
+CSS Module
+리액트는 사이트를 컴포넌트로 분리하여 합치는 방식으로 개발하다보니 각 컴포넌트 스타일링시 클래스명 중복 발생 가능성이 높다
+리액트 프로젝트에서 컴포넌트를 스타일링할때 자동으로 css클래스명을 고유한 이름을 지어주어 css 클래스가 중첩되는 것을 방지
+css Module 기술은 CRA에 포함된 기술
+CRA 프로젝트에서 CSS module을 사용 할 때에는 css파일의 확장자를 .module.css로 지정
+파일경로, 파일이름, 클래스이름, 해쉬값 등을 사용하여 고유한 클래스명을 생성
+
+
+postcss
+https://postcss.org/
+
+
+styled-components
+js안에 css를 작성하는 것
+styled-components 라이브러리를 사용( 다른 라이브러리) emotion styled-jsx )
+
+설치
+yarn add styled-components
+
+Tagged Template Literal 문법을 사용
+https://developer.mozilla.org/ko/docs/Web/JavaScript/Reference/Template_literals
+
+const 컴포넌트명 = styled.태그`
+  css코드 작성
+  - props로 전달받은 값으로 스타일 처리하기
+    background: ${props => props.color || 'deepskyblue'};
+  - css코드를 조건부로 보여주기
+    ${props => props.big && css`
+      width: 10rem;
+      height: 10rem;
+    `}
+`;
+* css코드를 조건부로 보여주고 싶다면 css함수를 불러와 사용해야 스타일 내부에서도 css를 사용할 수 있음
+  import styled, {css} from 'styled-components';
+
+
+  polished 모듈
+  Sass형식을 유틸함수로 구현할 수 있음
+
+  설치
+  yarn add polished
+
+  Sass의 lighten(), darken() 구현
+  import {darken, lighten} from 'polished'
+  lighten(amount, color)
+  darken(amount, color)
+
+
+  ThemeProvider 모듈
+  styled-components에서 색상코드를 지닌 변수를 모든 컴포넌트에서 조회하여 전역으로 사용할 수 있음
+  <ThemeProvider
+    theme{{
+      palette: {
+        blue: '#4169e1',
+        gray: '#495057',
+        pink: '#f08080'
+      }
+    }}
+  >컴포넌트</ThemeProvider>
+
+  <ThemeProvider>컴포넌트로 감싸진 컴포넌트 내에서 ThemeProvider에서 정의한 색상 팔레트를 사용할 수 있다
+  props.theme.palette[props.color]

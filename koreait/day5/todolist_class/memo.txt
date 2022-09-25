@@ -1,0 +1,39 @@
+클래스 컴포넌트
+class 클래스명 extends Component {
+    state = {}
+
+    render(){
+        return ()
+    }
+}
+
+export default 클래스명
+
+클래스 컴포넌트에서 상태관리
+state = {}에 상태관리할 값을 초기화하고 해당 값을 setState()함수를 통해 변경하여 리랜더링함
+
+클래스 컴포넌트에서 props받기
+this.props.속성명
+
+클래스 컴포넌트에서 특정 dom에 접근하기
+예) input태그에 접근하여 value값 가져오기
+    inputRef = React.createRef()
+    <input ref={this.inputRef}/>
+    const name = this.inputRef.current.value;
+
+
+폰트오쏨
+폰트오쏨 설치
+yarn add @fortawesome/fontawesome-free
+
+폰트오쏨 적용법
+https://fontawesome.com/v5.15/how-to-use/on-the-web/using-with/react
+
+index.js
+import '@fortawesome/fontawesome-free/js/all.js'
+
+
+이벤트나 데이터는 최상위에 놓고 하위 컴포넌트에게 props로 전달하는 방식으로 작성한다
+
+JSX
+https://ko.reactjs.org/docs/introducing-jsx.html

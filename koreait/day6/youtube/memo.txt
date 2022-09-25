@@ -1,0 +1,5 @@
+axios
+브라우저, node.js를 위한 Promise API를 활용하는 HTTP비동기 통신 라이브러리
+환경에 따라 브라우저의 XMLHttpRequest객체 또는 Node,js의 HTTP API 사용
+Promise(ES6) api 사용
+Http 요청과 응답을  자동으로 json현태로 변경
